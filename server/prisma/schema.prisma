@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  movie_id    Int    @id @unique(map: "movie_id_UNIQUE") @default(autoincrement())
+  poster      String @db.VarChar(225)
+  rtScore     String @db.VarChar(45)
+  imdbScore   String @db.VarChar(45)
+  mName       String @db.VarChar(45)
+  releaseYear String @db.VarChar(45)
+  director    String @db.VarChar(45)
+  actor       String @db.VarChar(225)
+  plot        String @db.VarChar(225)
+  genre       String @db.VarChar(45)
+  Post        Post[]
+  Rate        Rate[]
+}
+
+model Post {
+  post_id        Int     @default(autoincrement())
+  content        String? @db.VarChar(45)
+  likes          Int?    @db.TinyInt
+  User_user_id1  Int
+  Movie_movie_id Int
+  Movie          Movie   @relation(fields: [Movie_movie_id], references: [movie_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_Movie1")
+  User           User    @relation(fields: [User_user_id1], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_User1")
+  Like           Like[]
+
+  @@id([post_id, User_user_id1, Movie_movie_id])
+  @@index([Movie_movie_id], map: "fk_Post_Movie1_idx")
+  @@index([User_user_id1], map: "fk_Post_User1_idx")
+}
+
+model Rate {
+  User_user_id   Int
+  Movie_movie_id Int
+  rate_id        Int   @default(autoincrement())
+  score          Int
+  Movie          Movie @relation(fields: [Movie_movie_id], references: [movie_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_User_has_Movie_Movie1")
+  User           User  @relation(fields: [User_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_User_has_Movie_User1")
+
+  @@id([rate_id, User_user_id, Movie_movie_id])
+  @@index([Movie_movie_id], map: "fk_User_has_Movie_Movie1_idx")
+  @@index([User_user_id], map: "fk_User_has_Movie_User1_idx")
+}
+
+model User {
+  user_id     Int    @id @default(autoincrement())
+  password    String @db.VarChar(45)
+  email       String @unique @db.VarChar(45)
+  username    String @db.VarChar(45)
+  phoneNumber String @unique @db.VarChar(45)
+  is_admin    Int    @db.TinyInt
+  dateOfBirth String @db.VarChar(45)
+  Like        Like[]
+  Post        Post[]
+  Rate        Rate[]
+}
+
+model Like {
+  Post_post_id Int
+  User_user_id Int
+  like_id      Int  @default(autoincrement())
+  Post         Post @relation(fields: [Post_post_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_has_User_Post1")
+  User         User @relation(fields: [User_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_has_User_User1")
+
+  @@id([like_id, Post_post_id, User_user_id])
+  @@index([Post_post_id], map: "fk_Post_has_User_Post1_idx")
+  @@index([User_user_id], map: "fk_Post_has_User_User1_idx")
+}
