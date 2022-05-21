@@ -11,15 +11,16 @@ import Comment from "./Comment";
 import StarIcon from "@mui/icons-material/Star";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const Detail = () => {
   let { movieid } = useParams();
   const [movie, setMovie] = useState([]);
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
+  let navigate = useNavigate();
   var id = {
     mid: movieid,
     uid: sessionStorage.getItem("userId"),
@@ -132,6 +133,10 @@ const Detail = () => {
         }
       });
   };
+  const logout = () =>{
+    sessionStorage.clear();
+    navigate("/")
+  }
   return (
     <>
       {/******************** heading ********************/}
@@ -180,6 +185,7 @@ const Detail = () => {
                   borderColor: "#f9d3b4",
                 },
               }}
+              onClick={logout}
             >
               logout
             </Button>

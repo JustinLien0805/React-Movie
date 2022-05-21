@@ -4,12 +4,14 @@ import Movie from "../Movies/Movie";
 import "../..//App.css";
 import axios from "axios";
 import { Box, Button, Grid } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 const Home = () => {
   const [movieName, setMovieName] = useState("");
   const [avgs, setAvgs] = useState([]);
   // default value will be leaderboard
   const [movies, setMovies] = useState([]);
+  let navigate = useNavigate();
+
   const searchMovie = async (movieName) => {
     await axios
       .post("http://localhost:3001/search", movieName)
@@ -25,6 +27,7 @@ const Home = () => {
     searchMovie(movieName);
   }, [movieName]);
 
+  // get movie's score
   useEffect(async () => {
     const promises = movies.map(async (movie) => {
       const score = await axios.post("http://localhost:3001/avg", {
@@ -36,6 +39,12 @@ const Home = () => {
     const scores = await Promise.all(promises);
     setAvgs(scores);
   }, [movies]);
+
+  // logout function
+  const logout = () =>{
+    sessionStorage.clear();
+    navigate("/")
+  }
 
   return (
     <>
@@ -77,8 +86,9 @@ const Home = () => {
                     borderColor: "#f9d3b4",
                   },
                 }}
+                onClick={logout}
               >
-                login
+                logout
               </Button>
             </Box>
           </Grid>

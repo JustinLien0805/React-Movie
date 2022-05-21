@@ -121,6 +121,14 @@ const Comment = ({ info, handleDelete }) => {
     }
   };
 
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/totalLikes", { pid: info.post_id })
+      .then((response) => {
+        console.log(response.data);
+        setLikes(response.data[0].likes);
+      });
+  }, [rating]);
   return (
     <>
       <ThemeProvider theme={theme}>

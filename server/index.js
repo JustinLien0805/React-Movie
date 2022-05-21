@@ -131,7 +131,8 @@ app.post("/postUsername", async (req, res) => {
 
 // post comment and get updated comments
 app.post("/postComment", validateToken, async (req, res) => {
-  const { mid, uid, content } = req.body;
+  const { mid, content } = req.body;
+  const uid = req.user.id;
   const createPost = await prisma.Post.create({
     data: {
       content: content,
@@ -263,6 +264,3 @@ app.post("/totalLikes", async (req, res) => {
     await prisma.$queryRaw`SELECT count(*) as 'likes' FROM mydb.Like where Post_post_id = ${pid}`;
   res.json(likes);
 });
-// useEffect(() => {
-//   
-// }, []);
