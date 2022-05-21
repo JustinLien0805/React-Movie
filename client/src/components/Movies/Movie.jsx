@@ -1,9 +1,7 @@
-import React from "react";
-import axios from "axios";
 import { Stack, Rating } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { useNavigate } from "react-router-dom";
-const Movie = ({ movie }) => {
+const Movie = ({ movie, avg }) => {
   let navigate = useNavigate();
   const navigateDetail = () => {
     navigate(`/detail/${movie.movie_id}`);
@@ -31,10 +29,11 @@ const Movie = ({ movie }) => {
             <h3>{movie.mName}</h3>
           </div>
         </div>
+
         <Stack spacing={2}>
           <Rating
             name={movie.mName}
-            value={parseFloat(movie.imdbScore) / 2}
+            defaultValue={avg}
             readOnly
             percision={0.5}
             sx={{

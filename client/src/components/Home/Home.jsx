@@ -7,10 +7,11 @@ import { Box, Button, Grid } from "@mui/material";
 
 const Home = () => {
   const [movieName, setMovieName] = useState("");
+  const [avgs, setAvgs] = useState([]);
   // default value will be leaderboard
   const [movies, setMovies] = useState([]);
-  const searchMovie = (movieName) => {
-    axios
+  const searchMovie = async (movieName) => {
+    await axios
       .post("http://localhost:3001/search", movieName)
       .then((response) => {
         setMovies(response.data);
@@ -23,6 +24,18 @@ const Home = () => {
   useEffect(() => {
     searchMovie(movieName);
   }, [movieName]);
+
+  useEffect(async () => {
+    const promises = movies.map(async (movie) => {
+      const score = await axios.post("http://localhost:3001/avg", {
+        mid: movie.movie_id,
+      });
+      console.log(score);
+      return score.data._avg.score;
+    });
+    const scores = await Promise.all(promises);
+    setAvgs(scores);
+  }, [movies]);
 
   return (
     <>
@@ -83,8 +96,8 @@ const Home = () => {
       </div>
       {movieName.length > 0 && movies?.length > 0 ? (
         <div className="container">
-          {movies.map((movie) => (
-            <Movie movie={movie} key={movie.movie_id} />
+          {movies.map((movie, index) => (
+            <Movie movie={movie} key={movie.movie_id} avg={avgs[index]} />
           ))}
         </div>
       ) : (

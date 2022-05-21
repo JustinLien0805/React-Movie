@@ -79,10 +79,23 @@ app.post("/search", async (req, res) => {
       },
     },
   });
+
   res.json(movies);
 });
 
-// get the average score for home page movie
+// select movie's average rating
+app.post("/avg", async (req, res) => {
+  const { mid } = req.body;
+  const avg = await prisma.Rate.aggregate({
+    _avg: {
+      score: true,
+    },
+    where: {
+      Movie_movie_id: parseInt(mid),
+    },
+  });
+  res.json(avg);
+});
 
 //  ************************** Detail **********************************
 // get specific movie and posts by id
@@ -242,3 +255,14 @@ app.post("/checkMovieRate", validateToken, async (req, res) => {
     res.json({ rating: checkRate[0].score });
   }
 });
+
+// count total likes for post
+app.post("/totalLikes", async (req, res) => {
+  const { pid } = req.body;
+  const likes =
+    await prisma.$queryRaw`SELECT count(*) as 'likes' FROM mydb.Like where Post_post_id = ${pid}`;
+  res.json(likes);
+});
+// useEffect(() => {
+//   
+// }, []);

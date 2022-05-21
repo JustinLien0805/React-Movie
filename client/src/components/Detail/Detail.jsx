@@ -41,7 +41,7 @@ const Detail = () => {
       .catch((error) => {
         console.log(error);
       });
-      
+
     // check movie rating
     axios
       .post(
@@ -240,6 +240,7 @@ const Detail = () => {
                 justifyContent: "center",
               }}
             >
+              <Typography variant="h5" color="white">Your Rating</Typography>
               <Rating
                 size="large"
                 value={rating}

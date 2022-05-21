@@ -42,9 +42,8 @@ const Comment = ({ info, handleDelete }) => {
   const [username, setUsername] = useState("");
   const [rating, setRating] = useState(0);
   const [admin, setAdmin] = useContext(AdminContext);
-
+  const [likes, setLikes] = useState(0);
   useEffect(() => {
-    console.log(admin);
     axios
       .post("http://localhost:3001/postUsername", id)
       .then((response) => {
@@ -70,6 +69,13 @@ const Comment = ({ info, handleDelete }) => {
         } else {
           setRating(1);
         }
+      });
+    // total likes
+    axios
+      .post("http://localhost:3001/totalLikes", { pid: info.post_id })
+      .then((response) => {
+        console.log(response.data);
+        setLikes(response.data[0].likes);
       });
   }, []);
 
@@ -137,11 +143,14 @@ const Comment = ({ info, handleDelete }) => {
                   value={rating}
                   onChange={handleLike}
                 />
+                <Typography variant="h5" sx={{ ml: 1 }}>
+                  {likes}
+                </Typography>
                 {admin === 1 && (
                   <IconButton
                     aria-label="close"
                     sx={{ color: "#f9d3b4" }}
-                    onClick={()=>handleDelete(info.post_id)}
+                    onClick={() => handleDelete(info.post_id)}
                   >
                     <DeleteIcon sx={{ fontSize: "inherit" }} />
                   </IconButton>

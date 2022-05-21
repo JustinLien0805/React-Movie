@@ -25,7 +25,6 @@ model Movie {
 model Post {
   post_id        Int     @default(autoincrement())
   content        String? @db.VarChar(45)
-  likes          Int?    @db.TinyInt
   User_user_id1  Int
   Movie_movie_id Int
   Movie          Movie   @relation(fields: [Movie_movie_id], references: [movie_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Post_Movie1")
