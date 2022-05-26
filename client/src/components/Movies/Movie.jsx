@@ -6,6 +6,7 @@ const Movie = ({ movie, avg }) => {
   const navigateDetail = () => {
     navigate(`/detail/${movie.movie_id}`);
   };
+
   return (
     <>
       <Stack
@@ -33,7 +34,7 @@ const Movie = ({ movie, avg }) => {
         <Stack spacing={2}>
           <Rating
             name={movie.mName}
-            defaultValue={avg}
+            value={avg || 5}
             readOnly
             percision={0.5}
             sx={{

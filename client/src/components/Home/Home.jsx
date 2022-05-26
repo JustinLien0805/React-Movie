@@ -11,6 +11,7 @@ const Home = () => {
   // default value will be leaderboard
   const [movies, setMovies] = useState([]);
   let navigate = useNavigate();
+  const genre = ["Action", "Romance", "Sci-Fi", "Comedy", "Drama"];
 
   const searchMovie = async (movieName) => {
     await axios
@@ -24,7 +25,9 @@ const Home = () => {
       });
   };
   useEffect(() => {
-    searchMovie(movieName);
+    if (movieName.length !== 0) {
+      searchMovie(movieName);
+    }
   }, [movieName]);
 
   // get movie's score
@@ -33,7 +36,6 @@ const Home = () => {
       const score = await axios.post("http://localhost:3001/avg", {
         mid: movie.movie_id,
       });
-      console.log(score);
       return score.data._avg.score;
     });
     const scores = await Promise.all(promises);
@@ -41,10 +43,24 @@ const Home = () => {
   }, [movies]);
 
   // logout function
-  const logout = () =>{
+  const logout = () => {
     sessionStorage.clear();
-    navigate("/")
-  }
+    navigate("/");
+  };
+
+  const findMovieByGenre = async (e) => {
+    await axios
+      .post("http://localhost:3001/genre", {
+        genre: e.currentTarget.value,
+      })
+      .then((response) => {
+        setMovies(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -104,7 +120,39 @@ const Home = () => {
           }}
         />
       </div>
-      {movieName.length > 0 && movies?.length > 0 ? (
+      <Box
+        style={{ width: "100%" }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {genre.map((g) => (
+          <Button
+            key={g}
+            value={g}
+            variant="outlined"
+            color="secondary"
+            sx={{
+              m: 2,
+              width: 125,
+              color: "#f9d3b4",
+              borderColor: "#f9d3b4",
+              "&:hover": {
+                backgroundColor: "#f9d3b4",
+                color: "#212426",
+                borderColor: "#f9d3b4",
+              },
+            }}
+            onClick={findMovieByGenre}
+          >
+            {g}
+          </Button>
+        ))}
+      </Box>
+      {movieName.length >= 0 && movies?.length > 0 ? (
         <div className="container">
           {movies.map((movie, index) => (
             <Movie movie={movie} key={movie.movie_id} avg={avgs[index]} />
@@ -112,7 +160,7 @@ const Home = () => {
         </div>
       ) : (
         <div className="empty">
-          <h2>no movies found</h2>
+          <h2>no movie found</h2>
         </div>
       )}
     </>
