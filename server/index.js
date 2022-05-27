@@ -107,6 +107,21 @@ app.post("/genre", async (req, res) => {
   });
   res.json(movies);
 });
+
+// recommand movie
+app.get("/recommand", async (req, res) => {
+  const recommand =
+    await prisma.$queryRaw`SELECT  Movie_movie_id, count(*) as 'posts' FROM mydb.Post group by Movie_movie_id limit 10;`;
+  console.log(recommand[0].Movie_movie_id);
+  let movies = [];
+  for (let i = 0; i < recommand.length; i++) {
+    const movie = await prisma.Movie.findUnique({
+      where: { movie_id: recommand[i].Movie_movie_id },
+    });
+    movies.push(movie);
+  }
+  res.json(movies);
+});
 //  ************************** Detail **********************************
 // get specific movie and posts by id
 app.post("/searchById", async (req, res) => {

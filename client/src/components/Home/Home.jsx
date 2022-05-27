@@ -13,6 +13,19 @@ const Home = () => {
   let navigate = useNavigate();
   const genre = ["Action", "Romance", "Sci-Fi", "Comedy", "Drama"];
 
+  // get recommandation
+  useEffect(async () => {
+    axios
+      .get("http://localhost:3001/recommand")
+      .then((response) => {
+        setMovies(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const searchMovie = async (movieName) => {
     await axios
       .post("http://localhost:3001/search", movieName)
