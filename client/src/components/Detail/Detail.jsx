@@ -29,7 +29,7 @@ const Detail = () => {
   useEffect(() => {
     // get movie info and movie's posts
     axios
-      .post("http://localhost:3001/searchById", id)
+      .post("http://localhost:3001/detail/searchById", id)
       .then((response) => {
         if (response.data.error) {
           console.log(response.data.error);
@@ -46,7 +46,7 @@ const Detail = () => {
     // check movie rating
     axios
       .post(
-        "http://localhost:3001/checkMovieRate",
+        "http://localhost:3001/detail/checkMovieRate",
         {
           mid: movieid,
         },
@@ -71,7 +71,7 @@ const Detail = () => {
     // post comment and validate
     console.log(content);
     axios
-      .post("http://localhost:3001/postComment", id, {
+      .post("http://localhost:3001/detail/postComment", id, {
         headers: { accessToken: sessionStorage.getItem("accessToken") },
       })
       .then((response) => {
@@ -93,7 +93,7 @@ const Detail = () => {
   const handleDelete = (pid) => {
     axios
       .post(
-        "http://localhost:3001/deletePost",
+        "http://localhost:3001/detail/deletePost",
         { pid: pid, mid: movieid },
         {
           headers: { accessToken: sessionStorage.getItem("accessToken") },
@@ -114,7 +114,7 @@ const Detail = () => {
   const handleRating = (event, newValue) => {
     axios
       .post(
-        "http://localhost:3001/rateMovie",
+        "http://localhost:3001/detail/rateMovie",
         {
           mid: movieid,
           rating: newValue,

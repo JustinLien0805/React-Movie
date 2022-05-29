@@ -16,7 +16,7 @@ const Home = () => {
   // get recommandation
   useEffect(async () => {
     axios
-      .get("http://localhost:3001/recommand")
+      .get("http://localhost:3001/home/recommand")
       .then((response) => {
         setMovies(response.data);
         console.log(response.data);
@@ -28,7 +28,7 @@ const Home = () => {
 
   const searchMovie = async (movieName) => {
     await axios
-      .post("http://localhost:3001/search", movieName)
+      .post("http://localhost:3001/home/search", movieName)
       .then((response) => {
         setMovies(response.data);
         console.log(response.data);
@@ -46,7 +46,7 @@ const Home = () => {
   // get movie's score
   useEffect(async () => {
     const promises = movies.map(async (movie) => {
-      const score = await axios.post("http://localhost:3001/avg", {
+      const score = await axios.post("http://localhost:3001/home/avg", {
         mid: movie.movie_id,
       });
       return score.data._avg.score;
@@ -63,7 +63,7 @@ const Home = () => {
 
   const findMovieByGenre = async (e) => {
     await axios
-      .post("http://localhost:3001/genre", {
+      .post("http://localhost:3001/home/genre", {
         genre: e.currentTarget.value,
       })
       .then((response) => {

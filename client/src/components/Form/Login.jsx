@@ -81,9 +81,8 @@ const Login = () => {
     onSubmit: (values) => {
       // axios posts to database
       axios
-        .post("http://localhost:3001/login", values)
+        .post("http://localhost:3001/user/login", values)
         .then((response) => {
-          console.log(response.data.is_Admin);
           if (response.data.result === "successful login") {
             alert("login success");
             navigate("/movie");
