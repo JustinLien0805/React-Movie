@@ -28,7 +28,7 @@ const Home = () => {
 
   const searchMovie = async (movieName) => {
     await axios
-      .post("http://localhost:3001/home/search", movieName)
+      .post("http://localhost:3001/home/search", { movieName: movieName })
       .then((response) => {
         setMovies(response.data);
         console.log(response.data);
