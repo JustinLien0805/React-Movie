@@ -1,2 +1,2 @@
 # React-Movie
-Movie Rating and Discussing Website
+Movie Rating and Commenting Website(dev)
