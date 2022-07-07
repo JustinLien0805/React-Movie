@@ -1,5 +1,5 @@
 # React-Movie
-Movie Rating and Commenting Website
+Movie Rating and Discussing Website
 
 ## Login 
 <img width="1513" alt="截圖 2022-06-27 下午12 02 48" src="https://user-images.githubusercontent.com/74034793/175857913-1b5a880e-cc2b-4cde-a9bb-5e9d6539351d.png">
